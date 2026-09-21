@@ -1,5 +1,5 @@
 import type { Event } from "../model/Event.ts";
-import type { ExternalEventSourceChannel } from "./ExternalEventSourceChannel.ts";
+import type { EventTranslator } from "./EventTranslator.ts";
 
 export type StopWatching = () => Promise<void>;
 
@@ -9,28 +9,28 @@ export type StopWatching = () => Promise<void>;
  */
 export abstract class ExternalEventSource {
     readonly sourceName: string;
-    readonly channels: ExternalEventSourceChannel[] = [];
+    readonly translators: EventTranslator[] = [];
 
-    addEventSourceChannel(channel: ExternalEventSourceChannel): this {
-        this.channels.push(channel);
+    addTranslator(translator: EventTranslator): this {
+        this.translators.push(translator);
         return this;
     }
 
     push?(emitEvent: (event: Event) => void): Promise<StopWatching>;
     pull?(cursor: string | null): Promise<{ events: Event[]; cursor: string }>;
 
-    protected get channelNames(): string[] {
-        return this.channels.map((channel) => channel.channelName);
+    protected get translatorNames(): string[] {
+        return this.translators.map((translator) => translator.translatorName);
     }
 
-    protected async dispatchToChannels(
+    protected async normalize(
         rawData: unknown,
-    ): Promise<{ channel: ExternalEventSourceChannel; event: Event } | null> {
-        for (const channel of this.channels) {
-            const event = await channel.toEvent(rawData);
+    ): Promise<{ translator: EventTranslator; event: Event } | null> {
+        for (const translator of this.translators) {
+            const event = await translator.translate(rawData);
 
             if (!event) continue;
-            return { channel, event };
+            return { translator, event };
         }
         return null;
     }

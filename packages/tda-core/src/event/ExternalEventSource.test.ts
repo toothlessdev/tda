@@ -1,20 +1,20 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { ExternalEventSource } from "./ExternalEventSource";
 import { Event } from "../model/Event.ts";
-import type { ExternalEventSourceChannel } from "./ExternalEventSourceChannel.ts";
+import type { EventTranslator } from "./EventTranslator.ts";
 
 class TestEventSource extends ExternalEventSource {
     readonly sourceName = "test";
 
-    override dispatchToChannels(rawData: unknown) {
-        return super.dispatchToChannels(rawData);
+    override normalize(rawData: unknown) {
+        return super.normalize(rawData);
     }
 }
 
-class PrimaryAcceptingEventSourceChannel implements ExternalEventSourceChannel {
-    channelName = "accepting-00";
+class PrimaryAcceptingEventTranslator implements EventTranslator {
+    translatorName = "accepting-00";
 
-    async toEvent(_rawData: unknown): Promise<Event | null> {
+    async translate(_rawData: unknown): Promise<Event | null> {
         return new Event({
             id: "event-00",
             kind: "event-00",
@@ -26,10 +26,10 @@ class PrimaryAcceptingEventSourceChannel implements ExternalEventSourceChannel {
     }
 }
 
-class SecondaryAcceptingEventSourceChannel implements ExternalEventSourceChannel {
-    channelName = "accepting-01";
+class SecondaryAcceptingEventTranslator implements EventTranslator {
+    translatorName = "accepting-01";
 
-    async toEvent(_rawData: unknown): Promise<Event | null> {
+    async translate(_rawData: unknown): Promise<Event | null> {
         return new Event({
             id: "event-01",
             kind: "event-01",
@@ -41,51 +41,51 @@ class SecondaryAcceptingEventSourceChannel implements ExternalEventSourceChannel
     }
 }
 
-class RejectingEventSourceChannel implements ExternalEventSourceChannel {
-    channelName = "rejecting";
+class RejectingEventTranslator implements EventTranslator {
+    translatorName = "rejecting";
 
-    async toEvent(_rawData: unknown): Promise<Event | null> {
+    async translate(_rawData: unknown): Promise<Event | null> {
         return null;
     }
 }
 
-describe("dispatchToChannels", () => {
+describe("normalize", () => {
     beforeEach(() => {});
 
-    test("Incoming Event 를 toEvent 로 변환하는 최초 채널에 대해 { channel, event } 를 반환한다", async () => {
+    test("Incoming Event 를 translate 로 번역하는 최초 translator 에 대해 { translator, event } 를 반환한다", async () => {
         const testEventSource = new TestEventSource();
 
         testEventSource
-            .addEventSourceChannel(new PrimaryAcceptingEventSourceChannel())
-            .addEventSourceChannel(new SecondaryAcceptingEventSourceChannel())
-            .addEventSourceChannel(new RejectingEventSourceChannel());
+            .addTranslator(new PrimaryAcceptingEventTranslator())
+            .addTranslator(new SecondaryAcceptingEventTranslator())
+            .addTranslator(new RejectingEventTranslator());
 
-        const result = await testEventSource.dispatchToChannels({});
+        const result = await testEventSource.normalize({});
 
         expect(result?.event.id).toBe("event-00");
         expect(result?.event).toBeInstanceOf(Event);
 
-        expect(result?.channel.channelName).toBe("accepting-00");
-        expect(result?.channel).toBeInstanceOf(
-            PrimaryAcceptingEventSourceChannel,
+        expect(result?.translator.translatorName).toBe("accepting-00");
+        expect(result?.translator).toBeInstanceOf(
+            PrimaryAcceptingEventTranslator,
         );
 
-        // Incoming Event 를 toEvent 로 변환하는
-        // '첫번째가 아닌 채널' 은 반환하지 않는다
+        // Incoming Event 를 translate 로 번역하는
+        // '첫번째가 아닌 translator' 는 반환하지 않는다
         expect(result?.event).not.toBeInstanceOf(
-            SecondaryAcceptingEventSourceChannel,
+            SecondaryAcceptingEventTranslator,
         );
     });
 
-    test("Incoming Event 를 toEvent 로 변환하지 못하는 채널만 있을 때 null 을 반환한다", async () => {
+    test("Incoming Event 를 translate 로 번역하지 못하는 translator 만 있을 때 null 을 반환한다", async () => {
         const testEventSource = new TestEventSource();
 
         testEventSource
-            .addEventSourceChannel(new RejectingEventSourceChannel())
-            .addEventSourceChannel(new RejectingEventSourceChannel())
-            .addEventSourceChannel(new RejectingEventSourceChannel());
+            .addTranslator(new RejectingEventTranslator())
+            .addTranslator(new RejectingEventTranslator())
+            .addTranslator(new RejectingEventTranslator());
 
-        const result = await testEventSource.dispatchToChannels({});
+        const result = await testEventSource.normalize({});
 
         expect(result).toBeNull();
     });

@@ -8,11 +8,16 @@
         "build": "tsc -b",
         "typecheck": "tsc -b",
         "watch": "tsc -b -w",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "devDependencies": {
+        "@swc/core": "^1.16.1",
         "@types/node": "^22.10.0",
         "prettier": "^3.9.6",
-        "typescript": "^5.7.0"
+        "typescript": "^5.7.0",
+        "unplugin-swc": "^1.5.11",
+        "vitest": "^4.1.11"
     }
 }

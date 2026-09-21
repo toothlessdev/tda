@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+.omc/
+.agent/
+
+# 토큰. 데몬이 시작할 때 process.loadEnvFile 로 읽는다.
+.env
+
+# 로컬 상태 (DB, 로그). 회사 데이터라 레포에 올리지 않는다.
+.local/

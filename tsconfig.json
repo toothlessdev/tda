@@ -11,6 +11,9 @@
             "path": "packages/tda-adapter-jira/tsconfig.build.json"
         },
         {
+            "path": "packages/tda-adapter-google/tsconfig.build.json"
+        },
+        {
             "path": "packages/tda-app/tsconfig.build.json"
         }
     ]

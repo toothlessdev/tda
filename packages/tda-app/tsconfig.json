@@ -17,6 +17,9 @@
         },
         {
             "path": "../tda-adapter-jira/tsconfig.build.json"
+        },
+        {
+            "path": "../tda-adapter-google/tsconfig.build.json"
         }
     ]
 }

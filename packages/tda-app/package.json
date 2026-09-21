@@ -4,6 +4,7 @@
     "private": true,
     "type": "module",
     "dependencies": {
+        "@toothlessdev/tda-adapter-google": "workspace:*",
         "@toothlessdev/tda-adapter-jira": "workspace:*",
         "@toothlessdev/tda-adapter-slack": "workspace:*",
         "@toothlessdev/tda-core": "workspace:*",

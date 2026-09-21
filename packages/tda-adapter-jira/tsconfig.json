@@ -10,7 +10,7 @@
     ],
     "references": [
         {
-            "path": "../tda-core"
+            "path": "../tda-core/tsconfig.build.json"
         }
     ]
 }

@@ -10,13 +10,13 @@
     ],
     "references": [
         {
-            "path": "../tda-core"
+            "path": "../tda-core/tsconfig.build.json"
         },
         {
-            "path": "../tda-adapter-slack"
+            "path": "../tda-adapter-slack/tsconfig.build.json"
         },
         {
-            "path": "../tda-adapter-jira"
+            "path": "../tda-adapter-jira/tsconfig.build.json"
         }
     ]
 }

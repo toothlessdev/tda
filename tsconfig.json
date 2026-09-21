@@ -1,4 +1,17 @@
 {
     "files": [],
-    "references": []
+    "references": [
+        {
+            "path": "packages/tda-core/tsconfig.build.json"
+        },
+        {
+            "path": "packages/tda-adapter-slack/tsconfig.build.json"
+        },
+        {
+            "path": "packages/tda-adapter-jira/tsconfig.build.json"
+        },
+        {
+            "path": "packages/tda-app/tsconfig.build.json"
+        }
+    ]
 }

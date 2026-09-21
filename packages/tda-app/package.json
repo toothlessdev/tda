@@ -1,0 +1,16 @@
+{
+    "name": "@toothlessdev/tda-app",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@toothlessdev/tda-adapter-jira": "workspace:*",
+        "@toothlessdev/tda-adapter-slack": "workspace:*",
+        "@toothlessdev/tda-core": "workspace:*",
+        "reflect-metadata": "^0.2.2",
+        "tsyringe": "^4.10.0"
+    },
+    "scripts": {
+        "start": "node dist/main.js"
+    }
+}

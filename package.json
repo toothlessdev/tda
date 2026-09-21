@@ -10,7 +10,8 @@
         "watch": "tsc -b -w",
         "format": "prettier --write .",
         "test": "vitest run",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "start": "node packages/tda-app/dist/main.js"
     },
     "devDependencies": {
         "@swc/core": "^1.16.1",

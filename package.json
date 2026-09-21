@@ -7,10 +7,12 @@
     "scripts": {
         "build": "tsc -b",
         "typecheck": "tsc -b",
-        "watch": "tsc -b -w"
+        "watch": "tsc -b -w",
+        "format": "prettier --write ."
     },
     "devDependencies": {
         "@types/node": "^22.10.0",
+        "prettier": "^3.9.6",
         "typescript": "^5.7.0"
     }
 }
